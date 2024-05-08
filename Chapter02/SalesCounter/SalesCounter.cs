@@ -31,9 +31,9 @@ namespace SalesCounter {
         }
 
         //店舗別の売上を求める
-        public IDictionary<string,int> GetPerStoreSales() {
-            Dictionary<string,int>dict = new Dictionary<string,int>();
-            foreach (Sale sale in _sales) {
+        public Dictionary<string,int> GetPerStoreSales() {
+            var dict = new Dictionary<string,int>();
+            foreach (var sale in _sales) {
                 if (dict.ContainsKey(sale.ShopName)) {
                     dict[sale.ShopName] += sale.Amount;
                 } else {
