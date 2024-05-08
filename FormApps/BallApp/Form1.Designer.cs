@@ -1,5 +1,4 @@
-﻿
-namespace BallApps {
+﻿namespace BallApp {
     partial class Form1 {
         /// <summary>
         ///  Required designer variable.
@@ -26,17 +25,12 @@ namespace BallApps {
         private void InitializeComponent() {
             components = new System.ComponentModel.Container();
             timer1 = new System.Windows.Forms.Timer(components);
-            timer2 = new System.Windows.Forms.Timer(components);
             SuspendLayout();
             // 
             // timer1
             // 
             timer1.Interval = 10;
             timer1.Tick += timer1_Tick;
-            // 
-            // timer2
-            // 
-            timer2.Tick += timer2_Tick;
             // 
             // Form1
             // 
@@ -53,6 +47,5 @@ namespace BallApps {
 
         #endregion
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Timer timer2;
     }
 }
