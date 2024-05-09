@@ -15,9 +15,7 @@ namespace BallApps {
 
         public Point Location { get; internal set; }
 
-        public override bool Move() {
-            return true;
-        }
+        
 
         public override bool Move(Keys direction) {
             if(direction == Keys.Right) {
@@ -31,6 +29,10 @@ namespace BallApps {
             }
 
             return true;
+        }
+
+        public override bool Move(PictureBox pbBar, PictureBox pbBall) {
+            throw new NotImplementedException();
         }
     }
 }
