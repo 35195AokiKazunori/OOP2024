@@ -21,6 +21,6 @@ namespace BallApps {
 
         //移動メソッド（抽象メソッド）
         public abstract bool Move();
-
+        public abstract bool Move(Keys direction);
     }
 }
