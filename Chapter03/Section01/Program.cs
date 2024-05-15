@@ -7,13 +7,16 @@ using System.Threading.Tasks;
 namespace Section01 {
     internal class Program {
         static void Main(string[] args) {
-            var numbers = new[] { 4, 5, 6, 1, 4, 1, 4, 5, 7, 2, 6, 8, 2, 9 };
+            var names = new List<string> {
+                "tokyo","New Delhi","Bangkok","London",
+                "Paris","Berlin","Canberra","Hong Kong"
+            };
 
-            //int count = numbers.Count(n => n % 2 == 0);
-            double num = numbers.Where(n => n > 5).Average();
-            int total = numbers.Where(n => n > 5).Sum();
-            Console.WriteLine(num);
-            Console.WriteLine(total);
+            IEnumerable<string> query = names.Where(s => s.Contains(' ')).
+                                                Select(s => s.ToUpper());
+            foreach (string s in query)
+                Console.WriteLine(s);
+
         }
     }
 }
