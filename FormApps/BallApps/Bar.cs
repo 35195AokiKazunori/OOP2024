@@ -1,38 +1,36 @@
-﻿using System;
+﻿using BallApps;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace BallApps {
+namespace BallApp {
     internal class Bar : Obj {
 
-        public Bar(double xp,double yp)
-            : base(xp, yp, @"Picture\Bar.png") {
+        public Bar(double xp, double yp)
+            : base(xp, yp, @"Picture\bar.png") {
+
             MoveX = 10;
             MoveY = 0;
         }
 
-        public Point Location { get; internal set; }
-
-        
+        public override int Move(PictureBox pbBar, PictureBox pbBall) {
+            return 0;
+        }
 
         public override bool Move(Keys direction) {
-            if(direction == Keys.Right) {
+            if (direction == Keys.Right) {
                 if (PosX < 635) {
                     PosX += MoveX;
                 }
-            }else if(direction == Keys.Left) {
+            } else if (direction == Keys.Left) {
                 if (PosX > 0) {
                     PosX -= MoveX;
                 }
             }
-
             return true;
-        }
-
-        public override bool Move(PictureBox pbBar, PictureBox pbBall) {
-            throw new NotImplementedException();
         }
     }
 }

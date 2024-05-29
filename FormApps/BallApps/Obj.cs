@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BallApps {
+namespace BallApp {
     internal abstract class Obj {
         public Image? Image { get; set; }
         public double PosX { get; set; }
@@ -20,9 +20,7 @@ namespace BallApps {
         }
 
         //移動メソッド（抽象メソッド）
-        public abstract bool Move(PictureBox pbBar, PictureBox pbBall);
+        public abstract int Move(PictureBox pbBar, PictureBox pbBall);
         public abstract bool Move(Keys direction);
-
-
     }
 }
