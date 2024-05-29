@@ -14,17 +14,31 @@ namespace Section01 {
 
             Console.WriteLine("整数を入力");
             string inputNum = Console.ReadLine();
-
-            int num;
-            
-            if(int.TryParse(inputNum, out num)) {
-                //変換に成功したときの処理
-                Console.WriteLine("整数に変換した値:" + num);
-            } else {
-                //変換に失敗したときの処理
-                Console.WriteLine("整数の変換に失敗しました")
+            try {
+                int num = int.Parse(inputNum);
             }
-        }
+            catch (FormatException ex) {
+                Console.WriteLine("変換にエラー");
+
+            }
+            catch (ArgumentException ex) {
+                Console.WriteLine("ArgumentException" + ex.Message);
+            }
+            catch (OverflowException ex) {
+                Console.WriteLine("OverflowException" + ex.Message);
+            }
+            finally {
+                Console.WriteLine("処理が終了しました");
+            }
+
+                //if(int.TryParse(inputNum, out num)) {
+                //変換に成功したときの処理
+                //    Console.WriteLine("整数に変換した値:" + num);
+                //} else {
+                //変換に失敗したときの処理
+                //    Console.WriteLine("整数の変換に失敗しました");
+                //}
+            }
 
         private static object GetMessage(string code) {
             return null;
