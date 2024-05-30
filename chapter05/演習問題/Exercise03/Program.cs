@@ -63,7 +63,10 @@ namespace Exercise03 {
         }
 
         private static void Exercise3_6(string text) {
-
+            var array = text.Split(new[] {' ',',','-','_'}).ToArray();
+            foreach (var word in array) {
+                Console.WriteLine(word);
+            }
         }
     }
 }
