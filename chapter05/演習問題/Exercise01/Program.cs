@@ -9,7 +9,7 @@ namespace Exercise01 {
         static void Main(string[] args) {
             var str1 = Console.ReadLine();
             var str2 = Console.ReadLine();
-            if (String.Compare(str1,str2,true) == 0) {
+            if (String.Compare(str1,str2,ignoreCase:true) == 0) {
                 Console.WriteLine("一致しています");
             } else {
                 Console.WriteLine("不一致です");
