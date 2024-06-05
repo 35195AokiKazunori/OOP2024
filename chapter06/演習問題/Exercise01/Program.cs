@@ -30,21 +30,29 @@ namespace Exercise01 {
         }
 
         private static void Exercise1_2(int[] numbers) {
-            var last = numbers.LastOrDefault();
-            Console.WriteLine(last);
+            var last = numbers.Length - 2;
+            foreach (var number in numbers.Skip(last)) {
+                Console.WriteLine(number);
+            }
+
         }
 
         private static void Exercise1_3(int[] numbers) {
-            var strings = numbers.Select(name => name.ToString());
-            Console.WriteLine(strings);
+            var strings = numbers.Select(n => n.ToString());
+            foreach(var numStrung in strings) {  
+                Console.WriteLine(numStrung); 
+            }
         }
 
         private static void Exercise1_4(int[] numbers) {
-            throw new NotImplementedException();
+            foreach (var number in numbers.OrderBy(n => n).Take(3){
+                Console.WriteLine(number);
+            }
         }
 
         private static void Exercise1_5(int[] numbers) {
-            throw new NotImplementedException();
+            var count = numbers.Distinct().Count(n => n > 10);
+            Console.WriteLine(count);
         }
     }
 }
