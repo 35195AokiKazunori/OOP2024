@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace Exercise02 {
     internal class Program {
+        class Book {
+            public string Title { get; set; }
+            public int Price { get; set; }
+            public int Pages { get; set; }
+        }
+
         static void Main(string[] args) {
             var books = new List<Book> {
             new Book { Title = "C#プログラミングの新常識", Price = 3800, Pages = 378 },
@@ -41,14 +47,15 @@ namespace Exercise02 {
         }
 
         private static void Exercise2_1(List<Book> books) {
-            var page = books.GetBooks().Max(x => x.Pages);
-            var bookTitle = Books.GetBooks()
-                                 .FirstOrDefault(b => b.Pages == page);
-            Console.WriteLine(bookTitle.Title);
+            var text = books.Any(x => x.Title == "ワンダフル・C#ライフ");
+            foreach (var book in books) {  
+                Console.WriteLine(book.Title); 
+            }
         }
 
         private static void Exercise2_2(List<Book> books) {
-            throw new NotImplementedException();
+            var count = books.Count(x => x.Title.Contains("C#"));
+            Console.WriteLine(count);
         }
 
         private static void Exercise2_3(List<Book> books) {
