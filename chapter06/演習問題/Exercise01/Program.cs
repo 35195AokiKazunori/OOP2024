@@ -25,15 +25,18 @@ namespace Exercise01 {
         }
 
         private static void Exercise1_1(int[] numbers) {
-            
+            var max = numbers.Max();
+            Console.WriteLine(max);
         }
 
         private static void Exercise1_2(int[] numbers) {
-            throw new NotImplementedException();
+            var last = numbers.LastOrDefault();
+            Console.WriteLine(last);
         }
 
         private static void Exercise1_3(int[] numbers) {
-            throw new NotImplementedException();
+            var strings = numbers.Select(name => name.ToString());
+            Console.WriteLine(strings);
         }
 
         private static void Exercise1_4(int[] numbers) {
