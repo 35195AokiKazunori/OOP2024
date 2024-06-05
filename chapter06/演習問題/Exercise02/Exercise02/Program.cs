@@ -47,9 +47,9 @@ namespace Exercise02 {
         }
 
         private static void Exercise2_1(List<Book> books) {
-            var text = books.Any(x => x.Title == "ワンダフル・C#ライフ");
-            foreach (var book in books) {  
-                Console.WriteLine(book.Title); 
+            var text = books.Where(x => x.Title == "ワンダフル・C#ライフ");
+            foreach (var book in text) {  
+                Console.WriteLine("{0}: {1}円 {2}ページ",book.Title,book.Price,book.Pages); 
             }
         }
 
