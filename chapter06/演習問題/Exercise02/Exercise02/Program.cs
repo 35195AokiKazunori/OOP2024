@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Exercise02 {
     internal class Program {
@@ -59,23 +61,33 @@ namespace Exercise02 {
         }
 
         private static void Exercise2_3(List<Book> books) {
-            throw new NotImplementedException();
+            var average = books.Where(x => x.Title.Contains("C#")).Average(x => x.Pages);
+            Console.WriteLine(average);
         }
 
         private static void Exercise2_4(List<Book> books) {
-            throw new NotImplementedException();
+            var book = books.FirstOrDefault(x => x.Price >= 4000);
+            if(book != null)
+                Console.WriteLine(book.Title);
         }
 
         private static void Exercise2_5(List<Book> books) {
-            throw new NotImplementedException();
+            var pages = books.Where(x => x.Price < 4000).Max(x => x.Pages);
+            Console.WriteLine(pages);
         }
 
         private static void Exercise2_6(List<Book> books) {
-            throw new NotImplementedException();
+            var price = books.Where(x => x.Pages >= 400).OrderByDescending(x => x.Price);
+            foreach (var book in price) {
+                Console.WriteLine("{0}: {1}円", book.Title, book.Price);
+            }
         }
 
         private static void Exercise2_7(List<Book> books) {
-            throw new NotImplementedException();
+            var selected = books.Where(x => x.Title.Contains("C#") && x.Pages <= 500);
+            foreach (var book in selected) {
+                Console.WriteLine(book.Title);
+            }
         }
     }
 }
