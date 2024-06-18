@@ -6,7 +6,6 @@
         public Employee(int id, string name) {
             Id = id;
             Name = name;
-
         }
     }
 }
