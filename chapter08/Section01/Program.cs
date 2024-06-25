@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,11 +19,12 @@ namespace Section01 {
             var day = int.Parse(Console.ReadLine());
 
             var birtday = new DateTime(year, month, day);
+            var culture = new CultureInfo("jp-JP");
+            culture.DateTimeFormat.Calendar = new JapaneseCalendar();
+            var str = birtday.ToString("ggyy年M月d日",culture);
 
             Console.WriteLine();
-            Console.WriteLine(birtday.ToString("あなたは平成" + year + "年" 
-                                                + month + "月" + day + "日" 
-                                                + "dddd" + "に生まれました"));
+            Console.WriteLine(birtday.ToString("あなたは" + str + "に生まれました"));
             Console.WriteLine();
 
             //あなたは生まれてから今日で〇〇〇〇日目です
@@ -38,8 +40,7 @@ namespace Section01 {
             var Today = new DateTime(toyear, tomonth, today);
 
             TimeSpan diff =  Today - birtday;
-            Console.WriteLine("あなたが生まれてから今日で" 
-                                + "{0}日目",diff.Days);
+            Console.WriteLine("あなたが生まれてから今日で" + "{0}日目",diff.Days);
 
 
 
