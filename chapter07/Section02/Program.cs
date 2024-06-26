@@ -24,6 +24,4 @@ namespace Section02 {
         //var md = new MonthDay(8, 4);
         //var s = dict[md];
         //Console.WriteLine(s);
-    }
-    }
 }
