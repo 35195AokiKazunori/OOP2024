@@ -104,7 +104,10 @@ namespace Test02 {
 
         //問題６　年齢20代だけの平均身長を表示
         private static void Exercise06(List<Person> persons) {
-            var average = persons.Average(n => n.Age);
+            //var average = persons.TakeWhile(n => n.Age < 30);
+            var average = persons.Where(n => n.Age >= 20 && n.Age < 30).Average(n => n.Height);
+            Console.WriteLine(average);
+                
             //未完成
 
         }
