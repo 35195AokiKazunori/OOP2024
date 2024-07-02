@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -80,8 +81,10 @@ namespace Test02 {
         //問題３　偶数のみを昇順に並べて表示（遅延実行とする）
         private static void Exercise03(List<int> numbers) {
             var take = numbers.TakeWhile(n => n % 2 == 0);
-            var sortedBooks = take.OrderByDescending(n => n);
-            Console.WriteLine(sortedBooks); //未完成
+            var sortedBooks = take.OrderBy(n => n);
+            foreach (var book in sortedBooks) {
+                Console.WriteLine(book);
+            }
         }
 
         //問題４　0以上30未満の数字のみを表示（即時実行でも可とする）
