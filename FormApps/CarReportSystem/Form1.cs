@@ -137,7 +137,8 @@ namespace CarReportSystem {
 
         //作成したレポートを保存
         private void dgvCarReport_Click(object sender, EventArgs e) {
-            if (dgvCarReport.Rows.Count == 0)
+            if ((dgvCarReport.Rows.Count == 0) || 
+                (!dgvCarReport.CurrentRow.Selected)) return;
 
                 dtpDate.Value = (DateTime)dgvCarReport.CurrentRow.Cells["Date"].Value;
             cbAuthor.Text = (string)dgvCarReport.CurrentRow.Cells["Author"].Value;
@@ -153,7 +154,8 @@ namespace CarReportSystem {
 
         //削除ボタン
         private void btDeleteReport_Click(object sender, EventArgs e) {
-            if(dgvCarReport.CurrentRow == null) return;
+            if((dgvCarReport.CurrentRow == null) ||
+                (!dgvCarReport.CurrentRow.Selected)) return;
             listCarReports.RemoveAt(dgvCarReport.CurrentRow.Index);
             dgvCarReport.ClearSelection();
         }
@@ -161,8 +163,9 @@ namespace CarReportSystem {
 
         //修正ボタン
         private void btModifyReport_Click(object sender, EventArgs e) {
-            if (dgvCarReport.CurrentRow == null) return;
-            
+            if ((dgvCarReport.CurrentRow == null) ||
+                (!dgvCarReport.CurrentRow.Selected)) return;
+
 
             listCarReports[dgvCarReport.CurrentRow.Index].Date = dtpDate.Value;
             listCarReports[dgvCarReport.CurrentRow.Index].Author = cbAuthor.Text;
