@@ -53,6 +53,8 @@
             ofdPicFileOpen = new OpenFileDialog();
             ss1 = new StatusStrip();
             tslbMessage = new ToolStripStatusLabel();
+            sfdReportFileSave = new SaveFileDialog();
+            ofdReportFileOpen = new OpenFileDialog();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCarReport).BeginInit();
@@ -152,10 +154,12 @@
             // rbOther
             // 
             rbOther.AutoSize = true;
+            rbOther.Checked = true;
             rbOther.Location = new Point(307, 15);
             rbOther.Name = "rbOther";
             rbOther.Size = new Size(56, 19);
             rbOther.TabIndex = 0;
+            rbOther.TabStop = true;
             rbOther.Text = "その他";
             rbOther.UseVisualStyleBackColor = true;
             // 
@@ -345,6 +349,7 @@
             ss1.Location = new Point(0, 489);
             ss1.Name = "ss1";
             ss1.Size = new Size(780, 22);
+            ss1.SizingGrip = false;
             ss1.TabIndex = 8;
             ss1.Text = "statusStrip1";
             // 
@@ -352,6 +357,14 @@
             // 
             tslbMessage.Name = "tslbMessage";
             tslbMessage.Size = new Size(0, 17);
+            // 
+            // sfdReportFileSave
+            // 
+            sfdReportFileSave.FileOk += sfdReportFileSave_FileOk;
+            // 
+            // ofdReportFileOpen
+            // 
+            ofdReportFileOpen.FileName = "openFileDialog1";
             // 
             // Form1
             // 
@@ -380,6 +393,7 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
+            MaximizeBox = false;
             Name = "Form1";
             Text = "試乗レポート管理システム";
             Load += Form1_Load;
@@ -425,5 +439,7 @@
         private OpenFileDialog ofdPicFileOpen;
         private StatusStrip ss1;
         private ToolStripStatusLabel tslbMessage;
+        private SaveFileDialog sfdReportFileSave;
+        private OpenFileDialog ofdReportFileOpen;
     }
 }
