@@ -149,7 +149,7 @@ namespace CarReportSystem {
             cbCarName.Text = (string)dgvCarReport.CurrentRow.Cells["CarName"].Value;
             tbReport.Text = (string)dgvCarReport.CurrentRow.Cells["Report"].Value;
 
-            pbPicture.Image = dgvCarReport.CurrentRow.Cells["Picture"].Value as Image;
+            //pbPicture.Image = dgvCarReport.CurrentRow.Cells["Picture"].Value as Image;
         }
 
 
@@ -179,13 +179,13 @@ namespace CarReportSystem {
         }
 
 
-        //記録者のテキストが編集されたら
+        //記録者のテキストが編集
         private void cbAuthor_TextChanged(object sender, EventArgs e) {
             tslbMessage.Text = "";
         }
 
 
-        //車名のテキストが編集されたら
+        //車名のテキストが編集
         private void cbCarName_TextChanged(object sender, EventArgs e) {
             tslbMessage.Text = "";
         }
@@ -193,40 +193,78 @@ namespace CarReportSystem {
 
         //保存ボタン
         private void sfdReportFileSave_FileOk(object sender, CancelEventArgs e) {
-            if(sfdReportFileSave.ShowDialog() == DialogResult.OK) {
+            ReportSaveFile();
+        }
+        private void ReportSaveFile() {
+            if (sfdReportFileSave.ShowDialog() == DialogResult.OK) {
                 try {
                     //バイナリー形式でシリアル化
 #pragma warning disable SYSLIB0011 // 型またはメンバーが旧型式です
                     var bf = new BinaryFormatter();
 #pragma warning restore SYSLIB0011 // 型またはメンバーが旧型式です
-                    using (FileStream fs = File.Open(sfdReportFileSave.FileName,FileMode.Create)) {
+                    using (FileStream fs = File.Open(sfdReportFileSave.FileName, FileMode.Create)) {
                         bf.Serialize(fs, listCarReports);
                     }
                 }
                 catch (Exception) {
-
-                    throw;
+                    tslbMessage.Text = "書き込みエラー";
                 }
             }
         }
 
 
+        //フォルダからレポートを持ってくる
         private void dtReportOpen_Click(object sender, EventArgs e) {
-            if(ofdReportFileOpen.ShowDialog() == DialogResult.OK) {
+            ReportSaveOpen();
+        }
+        private void ReportSaveOpen() {
+            if (ofdReportFileOpen.ShowDialog() == DialogResult.OK) {
                 try {
                     //逆シリアル化でバイナリ形式で取り組む
 #pragma warning disable SYSLIB0011 // 型またはメンバーが旧型式です
                     var bf = new BinaryFormatter();
 #pragma warning restore SYSLIB0011 // 型またはメンバーが旧型式です
-                    using (FileStream fs = File.Open(ofdReportFileOpen.FileName,FileMode.Open,FileAccess.Read)) {
+                    using (FileStream fs = File.Open(ofdReportFileOpen.FileName, FileMode.Open, FileAccess.Read)) {
                         listCarReports = (BindingList<CarReport>)bf.Deserialize(fs);
                         dgvCarReport.DataSource = listCarReports;
+
+                        foreach (var carReport in listCarReports) {
+                            setCbAuthor(carReport.Author);
+                            setCbCarName(carReport.CarName);
+                        }
+
                     }
                 }
-                catch (Exception) {
-
-                    throw;
+                catch (Exception ex) {
+                    tslbMessage.Text = "ファイル形式が違います";
                 }
+                dgvCarReport.ClearSelection();
+            }
+        }
+
+
+        //各項目をクリアする
+        private void btReportClear_Click(object sender, EventArgs e) {
+            inputItemsAllClear();
+        }
+
+
+        private void 開くToolStripMenuItem_Click(object sender, EventArgs e) {
+            ReportSaveOpen();
+        }
+
+
+        private void 保存ToolStripMenuItem_Click(object sender, EventArgs e) {
+            ReportSaveFile();
+        }
+
+
+        //終了ボタン
+        private void 終了ToolStripMenuItem_Click(object sender, EventArgs e) {
+            DialogResult result = MessageBox.Show("終了しますか？", "確認", MessageBoxButtons.YesNo);
+            
+            if (result == System.Windows.Forms.DialogResult.Yes) {
+                Application.Exit();
             }
         }
     }
