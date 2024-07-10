@@ -1,6 +1,9 @@
 using System.ComponentModel;
 using System.Data;
+using System.Runtime.ConstrainedExecution;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace CarReportSystem {
     public partial class Form1 : Form {
@@ -8,6 +11,9 @@ namespace CarReportSystem {
 
         //カーレポート管理用リスト
         BindingList<CarReport> listCarReports = new BindingList<CarReport>();
+
+        //設定クラスのインスタンス作成
+        
 
 
         //コンストラクタ
@@ -132,7 +138,7 @@ namespace CarReportSystem {
 
         //画像表示しない
         private void Form1_Load(object sender, EventArgs e) {
-            //dgvCarReport.Columns["Picture"].Visible = false;  //画像表示しない
+            dgvCarReport.Columns["Picture"].Visible = false;  //画像表示しない
         }
 
 
@@ -261,9 +267,32 @@ namespace CarReportSystem {
 
         //終了ボタン
         private void 終了ToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (MessageBox.Show("本当に終了しますか？", "確認", 
+            if (MessageBox.Show("本当に終了しますか？", "確認",
                 MessageBoxButtons.YesNo) == DialogResult.Yes) {
                 Application.Exit();
+            }
+        }
+
+
+        private void 色設定ToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (cdColor.ShowDialog() == DialogResult.OK) {
+                BackColor = cdColor.Color;
+                //settings.MainFormColor = cdColor.Color.ToArgb(); //エラー
+            }
+        }
+
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
+            //設定ファイルのシリアル化
+            try {
+                using (var writer = XmlWriter.Create("settings.xml")) {
+                    //var serializer = new XmlSerializer(settings.GetType());
+                    //serializer.Serialize(writer, settings); //エラー
+                }
+            }
+            catch (Exception) {
+                MessageBox.Show("設定ファイル書き込みエラー");
+                throw;
             }
         }
     }
