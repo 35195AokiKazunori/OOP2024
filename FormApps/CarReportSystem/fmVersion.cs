@@ -17,5 +17,14 @@ namespace CarReportSystem {
         private void btVersionOk_Click(object sender, EventArgs e) {
             this.Close();
         }
+
+        private void fmVersion_Load(object sender, EventArgs e) {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var var = assembly.GetName().Version;
+            label2.Text = "Ver." + var.ToString();
+
+            var company = assembly.GetName();
+            label3.Text = company.ToString();
+        }
     }
 }

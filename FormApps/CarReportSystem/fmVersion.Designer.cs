@@ -26,6 +26,7 @@
             btVersionOk = new Button();
             label1 = new Label();
             label2 = new Label();
+            label3 = new Label();
             SuspendLayout();
             // 
             // btVersionOk
@@ -54,21 +55,33 @@
             label2.Font = new Font("游明朝 Demibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 128);
             label2.Location = new Point(12, 46);
             label2.Name = "label2";
-            label2.Size = new Size(72, 21);
+            label2.Size = new Size(66, 21);
             label2.TabIndex = 2;
-            label2.Text = "Ver.0.0.1";
+            label2.Text = "Version";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("游明朝 Demibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 128);
+            label3.Location = new Point(12, 79);
+            label3.Name = "label3";
+            label3.Size = new Size(42, 21);
+            label3.TabIndex = 3;
+            label3.Text = "会社";
             // 
             // fmVersion
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(462, 262);
+            Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(btVersionOk);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Name = "fmVersion";
             Text = "fmVersion";
+            Load += fmVersion_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -78,5 +91,6 @@
         private Button btVersionOk;
         private Label label1;
         private Label label2;
+        private Label label3;
     }
 }
