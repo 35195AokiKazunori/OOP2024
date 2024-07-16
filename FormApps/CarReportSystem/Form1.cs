@@ -13,8 +13,7 @@ namespace CarReportSystem {
         BindingList<CarReport> listCarReports = new BindingList<CarReport>();
 
         //設定クラスのインスタンス作成
-        
-
+        Settings settings = Settings.getInstance();
 
         //コンストラクタ
         public Form1() {
@@ -138,7 +137,28 @@ namespace CarReportSystem {
 
         //画像表示しない
         private void Form1_Load(object sender, EventArgs e) {
-            dgvCarReport.Columns["Picture"].Visible = false;  //画像表示しない
+            //dgvCarReport.Columns["Picture"].Visible = false;  //画像表示しない
+
+            //交互に色を設定(データグリットビュー)
+            dgvCarReport.RowsDefaultCellStyle.BackColor = Color.AliceBlue;
+            dgvCarReport.AlternatingRowsDefaultCellStyle.BackColor = Color.WhiteSmoke;
+
+            if (File.Exists("settings.xml")) {
+                //設定ファイルを逆シリアル化して背景を設定(P301 リスト12.7を参考)
+                try {
+                    using (var reader = XmlReader.Create("settings.xml")) {
+                        var serializer = new XmlSerializer(typeof(Settings));
+                        var settings = serializer.Deserialize(reader) as Settings;
+                        BackColor = Color.FromArgb(settings.MainFormColor);
+                        settings.MainFormColor = BackColor.ToArgb();
+                    }
+                }
+                catch (Exception) {
+                    tslbMessage.Text = "色情報ファイルエラー";
+                }
+            } else {
+                tslbMessage.Text = "色情報ファイルがありません";
+            }
         }
 
 
@@ -255,11 +275,13 @@ namespace CarReportSystem {
         }
 
 
+        //開くボタン
         private void 開くToolStripMenuItem_Click(object sender, EventArgs e) {
             ReportSaveOpen();
         }
 
 
+        //保存ボタン
         private void 保存ToolStripMenuItem_Click(object sender, EventArgs e) {
             ReportSaveFile();
         }
@@ -274,26 +296,35 @@ namespace CarReportSystem {
         }
 
 
+        //色設定ボタン
         private void 色設定ToolStripMenuItem_Click(object sender, EventArgs e) {
             if (cdColor.ShowDialog() == DialogResult.OK) {
-                BackColor = cdColor.Color;
-                //settings.MainFormColor = cdColor.Color.ToArgb(); //エラー
+                BackColor = cdColor.Color;  //背景色設定
+                settings.MainFormColor = cdColor.Color.ToArgb(); //背景色保存
             }
         }
 
 
+        //第二終了ボタン
         private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
             //設定ファイルのシリアル化
             try {
                 using (var writer = XmlWriter.Create("settings.xml")) {
-                    //var serializer = new XmlSerializer(settings.GetType());
-                    //serializer.Serialize(writer, settings); //エラー
+                    var serializer = new XmlSerializer(settings.GetType());
+                    serializer.Serialize(writer, settings); //エラー
                 }
             }
             catch (Exception) {
                 MessageBox.Show("設定ファイル書き込みエラー");
                 throw;
             }
+        }
+
+
+        //
+        private void このアプリについてToolStripMenuItem_Click(object sender, EventArgs e) {
+            var fmVersion = new fmVersion();
+            fmVersion.ShowDialog();
         }
     }
 }
