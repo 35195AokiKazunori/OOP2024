@@ -63,7 +63,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("游明朝 Demibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 128);
-            label3.Location = new Point(12, 79);
+            label3.Location = new Point(12, 97);
             label3.Name = "label3";
             label3.Size = new Size(42, 21);
             label3.TabIndex = 3;
