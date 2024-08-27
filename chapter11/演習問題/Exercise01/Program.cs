@@ -52,16 +52,48 @@ namespace Exercise01 {
         }
 
         private static void Exercise1_4(string file, string newfile) {
-            var element = new XElement("sports",
+            var soccer = new XElement("novelist",
                 new XElement("name", "サッカー", new XAttribute("kanji", "蹴球")),
                 new XElement("teammembers", "11"),
                 new XElement("firstplayed", "1863")
               );
             var xdoc = XDocument.Load(file);
-            xdoc.Root.Add(element);
+            xdoc.Root.Add(soccer);
 
             //保存
             xdoc.Save(newfile);
+
+            List<XElement> xElements = new List<XElement>();
+
+            string name, kanji, teammembers, firstplayed;
+            int nextFlag;
+            while(true) {
+                //入力処理
+                Console.Write("名称:");
+                name = Console.ReadLine();
+                Console.Write("漢字:");
+                kanji = Console.ReadLine();
+                Console.Write("人数:");
+                teammembers = Console.ReadLine();
+                Console.Write("起源:");
+                firstplayed = Console.ReadLine();
+                //1件分の要素作成
+                var element = new XElement("ballsport",
+                new XElement("name", name, new XAttribute("kanji", kanji)),
+                new XElement("teammembers", teammembers),
+                new XElement("firstplayed", firstplayed)
+              );
+                xElements.Add(element);//リストへ要素を追加
+
+                Console.WriteLine();//改行
+                Console.Write("追加【1】保存【2】");
+                Console.Write(">");
+                nextFlag = int.Parse(Console.ReadLine());
+                if(nextFlag == 2 ) break;//無限ループを抜ける
+                Console.WriteLine();
+            }
+            xdoc.Root.Add(xElements);
+            xdoc.Save(newfile);//保存
         }
     }
 }
