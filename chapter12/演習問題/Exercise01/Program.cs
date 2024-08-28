@@ -102,8 +102,7 @@ namespace Exercise01 {
                 WriteIndented = true,
             };
 
-            string jsonString = JsonSerializer.Serialize(emps, options);
-            Console.WriteLine(jsonString); //画面へ出力
+            JsonSerializer.Serialize(emps, options);
         }
     }
 }
