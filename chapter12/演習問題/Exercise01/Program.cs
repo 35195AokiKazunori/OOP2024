@@ -98,6 +98,7 @@ namespace Exercise01 {
             }
 
             var options = new JsonSerializerOptions {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase, //キー名のカスタマイズ
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
                 WriteIndented = true,
             };
