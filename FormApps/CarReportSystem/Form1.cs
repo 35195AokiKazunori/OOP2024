@@ -326,5 +326,19 @@ namespace CarReportSystem {
             var fmVersion = new fmVersion();
             fmVersion.ShowDialog();
         }
+
+
+
+
+
+
+
+
+
+
+
+        private void dgvCarReport_CellContentClick(object sender, DataGridViewCellEventArgs e) {
+
+        }
     }
 }
