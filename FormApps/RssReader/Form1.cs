@@ -21,12 +21,12 @@ namespace RssReader {
                 var url = wc.OpenRead(tbRssUri.Text);
                 var xdoc = XDocument.Load(url);
 
-                var xtitles = xdoc.Root.Descendants("item")
-                                .Select(item => item.Element("title").Value);
+                //var xtitles = xdoc.Root.Descendants("item")
+                //                .Select(item => item.Element("title").Value);
 
-                foreach ( var title in xtitles) {
-                    lbRssTitle.Items.Add(title);
-                }
+                //foreach ( var title in xtitles) {
+                //    lbRssTitle.Items.Add(title);
+                //}
 
                 var xitem = xdoc.Root.Descendants()
                     .Select(x => new {
@@ -34,6 +34,10 @@ namespace RssReader {
                         link = x.Element("link").Value,
                         pubDate = x.Element("pubDate").Value
                     });
+
+                foreach (var x in xitem) { 
+                    
+                }
             }
         }
     }
