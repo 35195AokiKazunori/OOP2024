@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Web.WebView2.Core;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,39 +10,90 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Windows.UI.Xaml.Controls;
+using System.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace RssReader {
     public partial class Form1 : Form {
+        List<Itemdata> xitem;
+        readonly CountdownEvent condition = new CountdownEvent(1);
         public Form1() {
             InitializeComponent();
         }
 
+        private void Form1_Load(object sender, EventArgs e) {
+            InitializeAsync();
+            cbGenre.Items.Add("主要");
+            cbGenre.Items.Add("国内");
+            cbGenre.Items.Add("国際");
+            cbGenre.Items.Add("経済");
+            cbGenre.Items.Add("エンタメ");
+            cbGenre.Items.Add("スポーツ");
+            cbGenre.Items.Add("IT");
+            cbGenre.Items.Add("科学");
+            cbGenre.Items.Add("地域");
+
+            cbGenre.SelectedIndex = -1;
+        }
+
+        async void InitializeAsync() {
+            await webView21.EnsureCoreWebView2Async(null);
+            webView21.CoreWebView2.NavigationCompleted += webView21_NavigationCompleted;
+        }
+
+        //タイトルとリンクを取ってくる
         private void btGet_Click(object sender, EventArgs e) {
             using (var wc = new WebClient()) {
                 var url = wc.OpenRead(tbRssUri.Text);
                 var xdoc = XDocument.Load(url);
 
-                //var xtitles = xdoc.Root.Descendants("item")
-                //                .Select(item => item.Element("title").Value);
+                xitem = xdoc.Root.Descendants("item")
+                    .Select(item => new Itemdata{
+                        Title = item.Element("title").Value,
+                        Link = item.Element("link").Value,
+                    }).ToList();
 
-                //foreach ( var title in xtitles) {
-                //    lbRssTitle.Items.Add(title);
-                //}
-
-                var xitem = xdoc.Root.Descendants()
-                    .Select(x => new {
-                        title = x.Element("title").Value,
-                        link = x.Element("link").Value,
-                        pubDate = x.Element("pubDate").Value
-                    });
-
-                foreach (var x in xitem) { 
-                    
+                foreach (var item in xitem) {
+                    lbRssTitle.Items.Add(item.Title);
                 }
             }
         }
+
+        private void btGenre_Click(object sender, EventArgs e) {
+
+        }
+
+        //タイトルを選択でURL先に飛ぶ
+        private void lbRssTitle_SelectedIndexChanged(object sender, EventArgs e) {
+                webView21.CoreWebView2.Navigate(xitem[lbRssTitle.SelectedIndex].Link);
+        }
+
+        private void webView21_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e) {
+            //読み込み結果を判定
+            if (e.IsSuccess)
+                Console.WriteLine("complete");
+            else
+                Console.WriteLine(e.WebErrorStatus);
+
+            //シグナル初期化
+            condition.Signal();
+            System.Threading.Thread.Sleep(1);
+            condition.Reset();
+        }
+
+        private void cbGenre_SelectedIndexChanged(object sender, EventArgs e) {
+            
+        }
+
+        private void tbRssUri_TextChanged(object sender, EventArgs e) {
+
+        }
     }
-    //テスト範囲
-    //システム設計 9月12日(木)
-    //C# プログラム 課題提出
+
+    //データ格納用クラス
+    public class Itemdata {
+        public string Title { get; set; }
+        public string Link { get; set; }
+    }
 }

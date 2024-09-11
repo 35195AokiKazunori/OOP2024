@@ -340,5 +340,17 @@ namespace CarReportSystem {
         private void dgvCarReport_CellContentClick(object sender, DataGridViewCellEventArgs e) {
 
         }
+
+        private void cbAuthor_SelectedIndexChanged(object sender, EventArgs e) {
+
+        }
+
+        private void cbCarName_SelectedIndexChanged(object sender, EventArgs e) {
+
+        }
+
+        private void dtpDate_ValueChanged(object sender, EventArgs e) {
+
+        }
     }
 }

@@ -89,6 +89,7 @@
             dtpDate.Name = "dtpDate";
             dtpDate.Size = new Size(198, 33);
             dtpDate.TabIndex = 1;
+            dtpDate.ValueChanged += dtpDate_ValueChanged;
             // 
             // label2
             // 
@@ -108,6 +109,7 @@
             cbAuthor.Name = "cbAuthor";
             cbAuthor.Size = new Size(376, 33);
             cbAuthor.TabIndex = 2;
+            cbAuthor.SelectedIndexChanged += cbAuthor_SelectedIndexChanged;
             // 
             // label3
             // 
@@ -147,6 +149,7 @@
             cbCarName.Name = "cbCarName";
             cbCarName.Size = new Size(376, 33);
             cbCarName.TabIndex = 2;
+            cbCarName.SelectedIndexChanged += cbCarName_SelectedIndexChanged;
             // 
             // groupBox1
             // 
