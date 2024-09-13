@@ -24,11 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.tbRssUri = new System.Windows.Forms.TextBox();
-            this.btGet = new System.Windows.Forms.Button();
             this.lbRssTitle = new System.Windows.Forms.ListBox();
-            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.label1 = new System.Windows.Forms.Label();
             this.webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.label2 = new System.Windows.Forms.Label();
             this.cbGenre = new System.Windows.Forms.ComboBox();
@@ -36,36 +32,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.webView21)).BeginInit();
             this.SuspendLayout();
             // 
-            // tbRssUri
-            // 
-            resources.ApplyResources(this.tbRssUri, "tbRssUri");
-            this.tbRssUri.Name = "tbRssUri";
-            this.tbRssUri.TextChanged += new System.EventHandler(this.tbRssUri_TextChanged);
-            // 
-            // btGet
-            // 
-            resources.ApplyResources(this.btGet, "btGet");
-            this.btGet.Name = "btGet";
-            this.btGet.UseVisualStyleBackColor = true;
-            this.btGet.Click += new System.EventHandler(this.btGet_Click);
-            // 
             // lbRssTitle
             // 
             this.lbRssTitle.FormattingEnabled = true;
             resources.ApplyResources(this.lbRssTitle, "lbRssTitle");
             this.lbRssTitle.Name = "lbRssTitle";
             this.lbRssTitle.SelectedIndexChanged += new System.EventHandler(this.lbRssTitle_SelectedIndexChanged);
-            // 
-            // webBrowser1
-            // 
-            resources.ApplyResources(this.webBrowser1, "webBrowser1");
-            this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.ScriptErrorsSuppressed = true;
-            // 
-            // label1
-            // 
-            resources.ApplyResources(this.label1, "label1");
-            this.label1.Name = "label1";
             // 
             // webView21
             // 
@@ -86,7 +58,6 @@
             this.cbGenre.FormattingEnabled = true;
             resources.ApplyResources(this.cbGenre, "cbGenre");
             this.cbGenre.Name = "cbGenre";
-            this.cbGenre.SelectedIndexChanged += new System.EventHandler(this.cbGenre_SelectedIndexChanged);
             // 
             // btGenre
             // 
@@ -103,11 +74,7 @@
             this.Controls.Add(this.cbGenre);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.webView21);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.lbRssTitle);
-            this.Controls.Add(this.btGet);
-            this.Controls.Add(this.tbRssUri);
             this.Name = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.webView21)).EndInit();
@@ -117,12 +84,7 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox tbRssUri;
-        private System.Windows.Forms.Button btGet;
         private System.Windows.Forms.ListBox lbRssTitle;
-        private System.Windows.Forms.WebBrowser webBrowser1;
-        private System.Windows.Forms.Label label1;
         private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbGenre;

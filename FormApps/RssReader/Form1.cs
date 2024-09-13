@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using Windows.UI.Xaml.Controls;
 using System.Threading;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Security.Policy;
 
 namespace RssReader {
     public partial class Form1 : Form {
@@ -24,7 +25,7 @@ namespace RssReader {
 
         private void Form1_Load(object sender, EventArgs e) {
             InitializeAsync();
-            cbGenre.Items.Add("主要");
+            cbGenre.Items.Add("主要", url = "https://news.yahoo.co.jp/rss/topics/top-picks.xml");
             cbGenre.Items.Add("国内");
             cbGenre.Items.Add("国際");
             cbGenre.Items.Add("経済");
@@ -43,13 +44,14 @@ namespace RssReader {
         }
 
         //タイトルとリンクを取ってくる
-        private void btGet_Click(object sender, EventArgs e) {
+
+        private void btGenre_Click(object sender, EventArgs e) {
             using (var wc = new WebClient()) {
-                var url = wc.OpenRead(tbRssUri.Text);
+                var url = wc.OpenRead(cbGenre.Text);
                 var xdoc = XDocument.Load(url);
 
                 xitem = xdoc.Root.Descendants("item")
-                    .Select(item => new Itemdata{
+                    .Select(item => new Itemdata {
                         Title = item.Element("title").Value,
                         Link = item.Element("link").Value,
                     }).ToList();
@@ -58,10 +60,6 @@ namespace RssReader {
                     lbRssTitle.Items.Add(item.Title);
                 }
             }
-        }
-
-        private void btGenre_Click(object sender, EventArgs e) {
-
         }
 
         //タイトルを選択でURL先に飛ぶ
@@ -80,14 +78,6 @@ namespace RssReader {
             condition.Signal();
             System.Threading.Thread.Sleep(1);
             condition.Reset();
-        }
-
-        private void cbGenre_SelectedIndexChanged(object sender, EventArgs e) {
-            
-        }
-
-        private void tbRssUri_TextChanged(object sender, EventArgs e) {
-
         }
     }
 
