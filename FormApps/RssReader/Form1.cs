@@ -25,7 +25,7 @@ namespace RssReader {
 
         private void Form1_Load(object sender, EventArgs e) {
             InitializeAsync();
-            cbGenre.Items.Add("主要", url = "https://news.yahoo.co.jp/rss/topics/top-picks.xml");
+            cbGenre.Items.Add("主要");
             cbGenre.Items.Add("国内");
             cbGenre.Items.Add("国際");
             cbGenre.Items.Add("経済");

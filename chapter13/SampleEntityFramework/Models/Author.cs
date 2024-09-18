@@ -11,5 +11,6 @@ namespace SampleEntityFramework.Models {
         public DateTime Birthday { get; set; }
         public string Gender { get; set; }
         public virtual ICollection<Book> Books { get; set; }
+        public object Title { get; set; }
     }
 }
