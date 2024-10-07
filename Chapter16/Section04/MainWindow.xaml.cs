@@ -27,13 +27,13 @@ namespace Section04 {
 
         private async void bt_16_10_Click(object sender, RoutedEventArgs e) {
             textBlock.Text = "";
-            var text = await GetPageAsync(@"http://www.bing.com/");
+            var text = await GetFromWIkipediaAsync(@"http://www.bing.com/");
             textBlock.Text = text;
         }
 
         private HttpClient _httpClient = new HttpClient();
         
-        private async Task<string> GetPageAsync(string urlstr) {
+        private async Task<string> GetFromWIkipediaAsync(string urlstr) {
             var str = await _httpClient.GetStringAsync(urlstr);
             return str;
         }
@@ -57,6 +57,18 @@ namespace Section04 {
             var xmldoc = XDocument.Parse(str);
             var rev = xmldoc.Root.Descendants("rev").FirstOrDefault();
             return WebUtility.HtmlDecode(rev?.Value);
+        }
+
+        private async void bt_16_23_Click(object sender, RoutedEventArgs e) {
+            var tasks = new List<Task>() {
+
+            };
+        }
+
+        private async void bt_16_11_Click(object sender, RoutedEventArgs e) {
+            textBlock.Text = "";
+            var text = await GetFromWIkipediaAsync("太田市");
+            textBlock.Text = text;
         }
     }
 }
