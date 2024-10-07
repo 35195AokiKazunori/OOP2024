@@ -130,7 +130,11 @@ namespace RssReader {
 
         //タイトルを選択でURL先に飛ぶ
         private void lbRssTitle_SelectedIndexChanged(object sender, EventArgs e) {
-            webView21.CoreWebView2.Navigate(xitem[lbRssTitle.SelectedIndex].Link);
+            if (lbRssTitle.SelectedIndex != -1) {
+                webView21.CoreWebView2.Navigate(xitem[lbRssTitle.SelectedIndex].Link);
+            } else {
+
+            }
         }
 
         //タイトルを選択でURL先に飛ぶ
