@@ -106,6 +106,7 @@
             resources.ApplyResources(this.dtDelete, "dtDelete");
             this.dtDelete.Name = "dtDelete";
             this.dtDelete.UseVisualStyleBackColor = false;
+            this.dtDelete.Click += new System.EventHandler(this.dtDelete_Click);
             // 
             // label3
             // 

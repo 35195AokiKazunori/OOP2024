@@ -165,11 +165,6 @@ namespace RssReader {
             lbRssSave.Items.Add(new System.Windows.Forms.ListViewItem(new[] { selectedItem.Title, selectedItem.Link }));
         }
 
-        //削除ボタン
-        private void btDelete_Click(object sender, EventArgs e) {
-            lbRssSave.Items.Clear();
-        }
-
         //ブラウザを開く画面
         private void webView21_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e) {
             //読み込み結果を判定
@@ -211,6 +206,11 @@ namespace RssReader {
                 "・リスト保存\r\n" +
                 "ニュースリストから記事を保存することができます。",
                 "このアプリの使い方について...");
+        }
+
+        //削除ボタン
+        private void dtDelete_Click(object sender, EventArgs e) {
+            lbRssSave.Items.Clear();
         }
     }
 
