@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace DistanceConverter {
     public abstract class ConverterBase {
+        public abstract bool IsMyUnit(string name);
         //メートルとの比率(この比率を掛けるとメートルに変換できる)
-        protected abstract double Ratio {  get; }
+        protected abstract double Ratio { get; }
 
         //距離の単位名(例、"メートル","フィート"など)
         public abstract string UnitName { get; }
