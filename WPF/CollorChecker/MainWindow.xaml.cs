@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,24 +19,76 @@ namespace CollorChecker {
     /// MainWindow.xaml の相互作用ロジック
     /// </summary>
     public partial class MainWindow : Window {
+        MyColor currentColer;
+        private bool existsComboColor;
+
         public MainWindow() {
             InitializeComponent();
+            //αチャンネルの初期値を設定（起動時すぐにストックボタンが押された時の対応）
+            currentColer = new MyColor { Color = Color.FromArgb(255, 0, 0, 0) };
+            DataContext = GetColorList(); ;
         }
 
+        //スライドを動かすと呼ばれるイベントハンドラ
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-            int rvalue = (int)rSlider.Value;
-            int gvalue = (int)gSlider.Value;
-            int bvalue = (int)bSlider.Value;
-
-            byte red = (byte)rvalue;
-            byte green = (byte)gvalue;
-            byte blue = (byte)bvalue;
-
-            colorArea.Background = new SolidColorBrush(Color.FromRgb((byte)rvalue, (byte)gvalue, (byte)bvalue));
+            currentColer.Color = Color.FromRgb((byte)rSlider.Value, (byte)gSlider.Value, (byte)bSlider.Value);
+            //currentColer.Name = GetColorList().Where(c => Equals(currentColer.Color)).;
+            colorArea.Background = new SolidColorBrush(currentColer.Color);
         }
 
         private void stockButton_Click(object sender, RoutedEventArgs e) {
-            
+            // colorSelectComboBoxから選択された色をストック
+            var selectedComboColor = (MyColor)colorSelectComboBox.SelectedItem;
+            if (selectedComboColor != null) {
+                bool existsComboColor = stockList.Items.Cast<MyColor>().Any(color => color.Color.Equals(selectedComboColor.Color));
+                if (!existsComboColor) {
+                    stockList.Items.Insert(0, selectedComboColor);
+                }
+            }
+
+            // スライダーの色を取得
+            var sliderColor = Color.FromRgb((byte)rSlider.Value, (byte)gSlider.Value, (byte)bSlider.Value);
+            var mySliderColor = new MyColor { Color = sliderColor, Name = $"R:{sliderColor.R} G:{sliderColor.G} B:{sliderColor.B}" };
+
+            bool existsSliderColor = stockList.Items.Cast<MyColor>().Any(c => c.Color.Equals(mySliderColor.Color));
+            if (!existsSliderColor) {
+                stockList.Items.Insert(0, mySliderColor);
+            }
+
+            // 重複があった場合
+            if (existsComboColor || existsSliderColor) {
+                MessageBox.Show("この色はすでにストックされています。");
+            }
+        }
+
+        private void stockList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            colorArea.Background = new SolidColorBrush(((MyColor)stockList.Items[stockList.SelectedIndex]).Color);
+            setSliderValue(((MyColor)stockList.Items[stockList.SelectedIndex]).Color);
+        }
+
+        private void setSliderValue(Color color) {
+            rSlider.Value = color.R;
+            gSlider.Value = color.G;
+            bSlider.Value = color.B;
+        }
+
+        /// <summary>
+        /// すべての色を取得するメソッド
+        /// </summary>
+        /// <returns></returns>
+        private MyColor[] GetColorList() {
+            return typeof(Colors).GetProperties(BindingFlags.Public | BindingFlags.Static)
+                .Select(i => new MyColor() { Color = (Color)i.GetValue(null), Name = i.Name }).ToArray();
+        }
+
+        private void colorSelectComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var mycolor = currentColer = (MyColor)((ComboBox)sender).SelectedItem;
+            var color = mycolor.Color;
+            var name = mycolor.Name;
+
+            setSliderValue(color);
+
+            stockList.Name = currentColer.Name;
         }
     }
 }
