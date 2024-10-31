@@ -20,20 +20,32 @@ namespace CollorChecker {
     /// </summary>
     public partial class MainWindow : Window {
         MyColor currentColer;
+        MyColor[] colorsTable;
         private bool existsComboColor;
 
         public MainWindow() {
             InitializeComponent();
             //αチャンネルの初期値を設定（起動時すぐにストックボタンが押された時の対応）
             currentColer = new MyColor { Color = Color.FromArgb(255, 0, 0, 0) };
-            DataContext = GetColorList(); ;
+            DataContext = colorsTable = GetColorList(); ;
         }
 
         //スライドを動かすと呼ばれるイベントハンドラ
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
             currentColer.Color = Color.FromRgb((byte)rSlider.Value, (byte)gSlider.Value, (byte)bSlider.Value);
-            //currentColer.Name = GetColorList().Where(c => Equals(currentColer.Color)).;
+            currentColer.Name = GetColorList().Where(c => Equals(currentColer.Color)).Select(x => x.Name).FirstOrDefault();
             colorArea.Background = new SolidColorBrush(currentColer.Color);
+
+            int i;
+            for(i = 0; i < colorsTable.Length; i++) {
+                if (colorsTable[i].Color.Equals(currentColer.Color)) {
+                    currentColer.Name = colorsTable[i].Name;
+                    break;
+                }
+            }
+            colorSelectComboBox.SelectedIndex = i;
+            colorArea.Background = new SolidColorBrush(currentColer.Color);
+            
         }
 
         private void stockButton_Click(object sender, RoutedEventArgs e) {
