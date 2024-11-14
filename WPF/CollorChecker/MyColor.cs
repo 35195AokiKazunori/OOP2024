@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace CollorChecker {
+namespace ColorChecker {
     public class MyColor {
         public Color Color { get; set; }
         public string Name { get; set; }

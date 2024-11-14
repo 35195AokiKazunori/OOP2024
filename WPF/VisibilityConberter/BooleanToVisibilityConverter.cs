@@ -16,11 +16,7 @@ namespace VisibilityConverter {
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            return value as Visibility? == Visibility.Collapsed;
-        }
-
-        public void RadioButton_Click(object sender, RoutedEventArgs e) {
-            RadioButton selectedRadioButton = (RadioButton)sender;
+            return value as Visibility? == Visibility.Visible;
         }
     }
 }

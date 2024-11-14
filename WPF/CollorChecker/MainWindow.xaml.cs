@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CollorChecker {
+namespace ColorChecker {
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
     /// </summary>
