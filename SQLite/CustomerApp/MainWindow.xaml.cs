@@ -45,16 +45,46 @@ namespace CustomerApp {
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e) {
-            
+            // ListViewで選択された顧客を取得
+            var selectedCustomer = CustomerListView.SelectedItem as Customer;
+
+            if (selectedCustomer == null) {
+                MessageBox.Show("更新する顧客を選択してください");
+                return;
+            }
+
+            // TextBoxに入力された新しい情報を選択された顧客に適用
+            selectedCustomer.Name = NameTextBox.Text;
+            selectedCustomer.Phone = PhoneTextBox.Text;
+            selectedCustomer.Address = AddressTextBox.Text;
+
+            try {
+                // SQLiteデータベースで更新処理
+                using (var connection = new SQLiteConnection(App.databasePass)) {
+                    connection.CreateTable<Customer>();  // 顧客テーブルが存在しない場合に作成
+                    connection.Update(selectedCustomer);  // 顧客情報の更新
+                }
+
+                // ListViewを再読み込みして更新後のデータを表示
+                ReadDatabase();
+            }
+            catch (Exception ex) {
+                MessageBox.Show($"更新中にエラーが発生しました: {ex.Message}");
+            }
         }
         //ListView表示
 
         private void ReadDatabase() {
-            using (var connection = new SQLiteConnection(App.databasePass)) {
-                connection.CreateTable<Customer>();
-                _customers = connection.Table<Customer>().ToList();
+            try {
+                using (var connection = new SQLiteConnection(App.databasePass)) {
+                    connection.CreateTable<Customer>();
+                    var customers = connection.Table<Customer>().ToList();
 
-                CustomerListView.ItemsSource = _customers;
+                    CustomerListView.ItemsSource = customers;
+                }
+            }
+            catch (Exception ex) {
+                MessageBox.Show($"データベースの読み込み中にエラーが発生しました: {ex.Message}");
             }
         }
 
@@ -86,25 +116,14 @@ namespace CustomerApp {
         private void CustomerListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var selectedCustomer = CustomerListView.SelectedItem as Customer;
 
-            if (selectedCustomer == null) {
-                MessageBox.Show("更新する顧客を選択してください");
-                return;
-            }
-
-            selectedCustomer.Name = NameTextBox.Text;
-            selectedCustomer.Phone = PhoneTextBox.Text;
-            selectedCustomer.Address = AddressTextBox.Text;
-
-            try {
-                using (var connection = new SQLiteConnection(App.databasePass)) {
-                    connection.CreateTable<Customer>(); 
-                    connection.Update(selectedCustomer); 
-                }
-
-                ReadDatabase();
-            }
-            catch (Exception ex) {
-                MessageBox.Show($"更新中にエラーが発生しました: {ex.Message}");
+            if (selectedCustomer != null) {
+                NameTextBox.Text = selectedCustomer.Name;
+                PhoneTextBox.Text = selectedCustomer.Phone;
+                AddressTextBox.Text = selectedCustomer.Address;
+            } else {
+                NameTextBox.Clear();
+                PhoneTextBox.Clear();
+                AddressTextBox.Clear();
             }
         }
     }
