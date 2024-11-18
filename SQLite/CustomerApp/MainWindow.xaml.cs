@@ -32,14 +32,19 @@ namespace CustomerApp {
                 Address = AddressTextBox.Text,
             };
 
-            using(var connection = new SQLiteConnection(App.databasePass)) {
-                connection.CreateTable<Customer>();
-                connection.Insert(customer);
+            try {
+                using (var connection = new SQLiteConnection(App.databasePass)) {
+                    connection.CreateTable<Customer>();
+                    connection.Insert(customer);
+                }
+                ReadDatabase(); // ListView表示
             }
-            ReadDatabase(); //ListView表示
+            catch (Exception ex) {
+                MessageBox.Show($"エラーが発生しました: {ex.Message}");
+            }
         }
 
-        private void ReadButton_Click(object sender, RoutedEventArgs e) {
+        private void UpdateButton_Click(object sender, RoutedEventArgs e) {
             
         }
         //ListView表示
@@ -72,6 +77,35 @@ namespace CustomerApp {
                 CustomerListView.ItemsSource = _customers;
             }
             ReadDatabase(); //ListView表示
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void CustomerListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var selectedCustomer = CustomerListView.SelectedItem as Customer;
+
+            if (selectedCustomer == null) {
+                MessageBox.Show("更新する顧客を選択してください");
+                return;
+            }
+
+            selectedCustomer.Name = NameTextBox.Text;
+            selectedCustomer.Phone = PhoneTextBox.Text;
+            selectedCustomer.Address = AddressTextBox.Text;
+
+            try {
+                using (var connection = new SQLiteConnection(App.databasePass)) {
+                    connection.CreateTable<Customer>(); 
+                    connection.Update(selectedCustomer); 
+                }
+
+                ReadDatabase();
+            }
+            catch (Exception ex) {
+                MessageBox.Show($"更新中にエラーが発生しました: {ex.Message}");
+            }
         }
     }
 }
