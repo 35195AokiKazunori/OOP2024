@@ -1,4 +1,5 @@
 ﻿using CustomerApp.Objects;
+using Microsoft.Win32;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace CustomerApp {
     /// </summary>
     public partial class MainWindow : Window {
         List<Customer> _customers;
+        private string _selectedImagePath;
         public MainWindow() {
             InitializeComponent();
         }
@@ -30,6 +32,7 @@ namespace CustomerApp {
                 Name = NameTextBox.Text,
                 Phone = PhoneTextBox.Text,
                 Address = AddressTextBox.Text,
+                ImagePath = _selectedImagePath
             };
 
             try {
@@ -57,6 +60,7 @@ namespace CustomerApp {
             selectedCustomer.Name = NameTextBox.Text;
             selectedCustomer.Phone = PhoneTextBox.Text;
             selectedCustomer.Address = AddressTextBox.Text;
+            selectedCustomer.ImagePath = _selectedImagePath;
 
             try {
                 // SQLiteデータベースで更新処理
@@ -124,6 +128,19 @@ namespace CustomerApp {
                 NameTextBox.Clear();
                 PhoneTextBox.Clear();
                 AddressTextBox.Clear();
+            }
+        }
+
+        private void ImageDeleteButton_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void ImageSelectButton_Click(object sender, RoutedEventArgs e) {
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "画像ファイル|*.jpg;*.jpeg;*.png;*.bmp;*.gif";  // 画像形式を指定
+
+            if (openFileDialog.ShowDialog() == true) {
+                _selectedImagePath = openFileDialog.FileName;  // 選択した画像のパスを保存
             }
         }
     }

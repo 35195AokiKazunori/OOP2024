@@ -28,6 +28,21 @@
             <Button Content="Save" x:Name="SaveButton" Click="SaveButton_Click" Margin="2"/>
             <Button Content="Delete" x:Name="DeleteButton" Click="DeleteButton_Click" Margin="2"/>
             <Button Content="UpdateButton" x:Name="ReadButton" Click="UpdateButton_Click" Margin="2"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="6*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="画像" Grid.Row="0" Grid.Column="0"/>
+                <Button Content="開く" x:Name="ImageSelectButton" Click="ImageSelectButton_Click" Height="30" Grid.Row="1" Grid.Column="0"/>
+                <Button Content="削除" x:Name="ImageDeleteButton" Click="ImageDeleteButton_Click" Height="30" Grid.Row="2" Grid.Column="0"/>
+            </Grid>
+
             <TextBox x:Name="SearchTextBox" FontSize="20" TextChanged="SearchTextBox_TextChanged"/>
             <ListView x:Name="CustomerListView" Margin="0,5,0,0" Height="300" d:ItemsSource="{d:SampleData}" SelectionChanged="CustomerListView_SelectionChanged">
                 <ListView.ItemTemplate>
