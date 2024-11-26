@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,12 +28,18 @@ namespace CustomerApp {
             InitializeComponent();
         }
 
+        //保存ボタン
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
+            if (string.IsNullOrEmpty(NameTextBox.Text)) {
+                MessageBox.Show("名前を入力してください。", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             var customer = new Customer() {
                 Name = NameTextBox.Text,
                 Phone = PhoneTextBox.Text,
                 Address = AddressTextBox.Text,
-                ImagePath = _selectedImagePath
+                ImagePath = _selectedImagePath != null ? File.ReadAllBytes(_selectedImagePath) : null  // 画像をbyte[]として保存
             };
 
             try {
@@ -40,15 +47,35 @@ namespace CustomerApp {
                     connection.CreateTable<Customer>();
                     connection.Insert(customer);
                 }
-                ReadDatabase(); // ListView表示
+                ReadDatabase();  // ListView表示を更新
             }
             catch (Exception ex) {
                 MessageBox.Show($"エラーが発生しました: {ex.Message}");
             }
         }
 
+        //削除ボタン
+        private void DeleteButton_Click(object sender, RoutedEventArgs e) {
+            _selectedImagePath = null;
+            SelectedImage.Source = null;
+
+            var selectedCustomer = CustomerListView.SelectedItem as Customer;
+            if (selectedCustomer != null) {
+                selectedCustomer.ImagePath = null;
+                using (var connection = new SQLiteConnection(App.databasePass)) {
+                    connection.Update(selectedCustomer);
+                }
+            }
+        }
+
+        //更新ボタン
         private void UpdateButton_Click(object sender, RoutedEventArgs e) {
-            // ListViewで選択された顧客を取得
+            // 名前が未入力の場合にエラーメッセージを表示
+            if (string.IsNullOrEmpty(NameTextBox.Text)) {
+                MessageBox.Show("名前を入力してください。", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             var selectedCustomer = CustomerListView.SelectedItem as Customer;
 
             if (selectedCustomer == null) {
@@ -56,35 +83,93 @@ namespace CustomerApp {
                 return;
             }
 
-            // TextBoxに入力された新しい情報を選択された顧客に適用
             selectedCustomer.Name = NameTextBox.Text;
             selectedCustomer.Phone = PhoneTextBox.Text;
             selectedCustomer.Address = AddressTextBox.Text;
-            selectedCustomer.ImagePath = _selectedImagePath;
+
+            if (!string.IsNullOrEmpty(_selectedImagePath)) {
+                selectedCustomer.ImagePath = File.ReadAllBytes(_selectedImagePath);
+            } else {
+                selectedCustomer.ImagePath = null;
+            }
 
             try {
-                // SQLiteデータベースで更新処理
                 using (var connection = new SQLiteConnection(App.databasePass)) {
-                    connection.CreateTable<Customer>();  // 顧客テーブルが存在しない場合に作成
-                    connection.Update(selectedCustomer);  // 顧客情報の更新
+                    connection.CreateTable<Customer>();
+                    connection.Update(selectedCustomer);
                 }
 
-                // ListViewを再読み込みして更新後のデータを表示
                 ReadDatabase();
             }
             catch (Exception ex) {
                 MessageBox.Show($"更新中にエラーが発生しました: {ex.Message}");
             }
         }
-        //ListView表示
 
+        //画像開くボタン
+        private void ImageSelectButton_Click(object sender, RoutedEventArgs e) {
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "画像ファイル|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
+
+            if (openFileDialog.ShowDialog() == true) {
+                _selectedImagePath = openFileDialog.FileName;
+
+                byte[] imageBytes = File.ReadAllBytes(_selectedImagePath);
+                SelectedImage.Source = ByteArrayToImage(imageBytes);  // 画像を表示
+            }
+        }
+
+        //画像削除ボタン
+        private void ImageDeleteButton_Click(object sender, RoutedEventArgs e) {
+            _selectedImagePath = null;
+            SelectedImage.Source = null;
+
+            // 画像パスを削除したことをデータベースにも反映
+            var selectedCustomer = CustomerListView.SelectedItem as Customer;
+            if (selectedCustomer != null) {
+                selectedCustomer.ImagePath = null;
+                using (var connection = new SQLiteConnection(App.databasePass)) {
+                    connection.Update(selectedCustomer);
+                }
+            }
+        }
+
+
+
+        //ListView選択
+        private void CustomerListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var selectedCustomer = CustomerListView.SelectedItem as Customer;
+
+            if (selectedCustomer != null) {
+                // 選択された顧客情報を表示
+                NameTextBox.Text = selectedCustomer.Name;
+                PhoneTextBox.Text = selectedCustomer.Phone;
+                AddressTextBox.Text = selectedCustomer.Address;
+
+                // 画像があれば表示
+                if (selectedCustomer.ImagePath != null && selectedCustomer.ImagePath.Length > 0) {
+                    SelectedImage.Source = ByteArrayToImage(selectedCustomer.ImagePath);
+                } else {
+                    SelectedImage.Source = null;
+                }
+            } else {
+                // 選択されていない場合、テキストボックスをクリア
+                NameTextBox.Clear();
+                PhoneTextBox.Clear();
+                AddressTextBox.Clear();
+                SelectedImage.Source = null;
+            }
+        }
+
+        //ListView読込
         private void ReadDatabase() {
             try {
                 using (var connection = new SQLiteConnection(App.databasePass)) {
                     connection.CreateTable<Customer>();
                     var customers = connection.Table<Customer>().ToList();
 
-                    CustomerListView.ItemsSource = customers;
+                    _customers = customers;
+                    CustomerListView.ItemsSource = _customers;
                 }
             }
             catch (Exception ex) {
@@ -92,55 +177,41 @@ namespace CustomerApp {
             }
         }
 
+        //ListView検索
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+            if (_customers == null) {
+                MessageBox.Show("顧客データがロードされていません。");
+                return;
+            }
+
             var filterList = _customers.Where(x => x.Name.Contains(SearchTextBox.Text)).ToList();
             CustomerListView.ItemsSource = filterList;
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e) {
-            var item = CustomerListView.SelectedItem as Customer;
-            if (item == null) {
-                MessageBox.Show("削除する行を選択してください");
-                return;
-            }
-
-            using (var connection = new SQLiteConnection(App.databasePass)) {
-                connection.CreateTable<Customer>();
-                connection.Delete(item);
-
-                CustomerListView.ItemsSource = _customers;
-            }
-            ReadDatabase(); //ListView表示
-        }
-
+        //プログラム開始時に読込
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-
+            ReadDatabase();
         }
 
-        private void CustomerListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            var selectedCustomer = CustomerListView.SelectedItem as Customer;
-
-            if (selectedCustomer != null) {
-                NameTextBox.Text = selectedCustomer.Name;
-                PhoneTextBox.Text = selectedCustomer.Phone;
-                AddressTextBox.Text = selectedCustomer.Address;
-            } else {
-                NameTextBox.Clear();
-                PhoneTextBox.Clear();
-                AddressTextBox.Clear();
+        //byte[]から画像に変換
+        private BitmapImage ByteArrayToImage(byte[] byteArray) {
+            if (byteArray == null || byteArray.Length == 0) {
+                throw new InvalidOperationException("無効な画像データ");
             }
-        }
 
-        private void ImageDeleteButton_Click(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void ImageSelectButton_Click(object sender, RoutedEventArgs e) {
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "画像ファイル|*.jpg;*.jpeg;*.png;*.bmp;*.gif";  // 画像形式を指定
-
-            if (openFileDialog.ShowDialog() == true) {
-                _selectedImagePath = openFileDialog.FileName;  // 選択した画像のパスを保存
+            try {
+                using (var memoryStream = new MemoryStream(byteArray)) {
+                    var image = new BitmapImage();
+                    image.BeginInit();
+                    image.StreamSource = memoryStream;
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.EndInit();
+                    return image;
+                }
+            }
+            catch (Exception ex) {
+                MessageBox.Show($"画像の読み込みに失敗しました: {ex.Message}");
+                return null;
             }
         }
     }

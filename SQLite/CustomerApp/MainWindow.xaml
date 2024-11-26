@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomerApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="300" Loaded="Window_Loaded">
+        Title="CustomerApp" Height="660" Width="400" Loaded="Window_Loaded">
     <Grid>
         <StackPanel Margin="10">
             <Grid>
@@ -25,9 +25,6 @@
                 <TextBlock Text="住所" Grid.Row="2" Grid.Column="0"/>
                 <TextBox x:Name="AddressTextBox" Grid.Row="2" Grid.Column="1" Margin="1"/>
             </Grid>
-            <Button Content="Save" x:Name="SaveButton" Click="SaveButton_Click" Margin="2"/>
-            <Button Content="Delete" x:Name="DeleteButton" Click="DeleteButton_Click" Margin="2"/>
-            <Button Content="UpdateButton" x:Name="ReadButton" Click="UpdateButton_Click" Margin="2"/>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -39,22 +36,38 @@
                     <ColumnDefinition Width="6*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="画像" Grid.Row="0" Grid.Column="0"/>
-                <Button Content="開く" x:Name="ImageSelectButton" Click="ImageSelectButton_Click" Height="30" Grid.Row="1" Grid.Column="0"/>
-                <Button Content="削除" x:Name="ImageDeleteButton" Click="ImageDeleteButton_Click" Height="30" Grid.Row="2" Grid.Column="0"/>
+                <Button Content="開く" x:Name="ImageSelectButton" Click="ImageSelectButton_Click"  Grid.Row="1" Grid.Column="0"/>
+                <Button Content="削除" x:Name="ImageDeleteButton" Click="ImageDeleteButton_Click"  Grid.Row="2" Grid.Column="0"/>
+                <Image x:Name="SelectedImage" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Height="100" Margin="5"/>
             </Grid>
 
-            <TextBox x:Name="SearchTextBox" FontSize="20" TextChanged="SearchTextBox_TextChanged"/>
-            <ListView x:Name="CustomerListView" Margin="0,5,0,0" Height="300" d:ItemsSource="{d:SampleData}" SelectionChanged="CustomerListView_SelectionChanged">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Id}"/>
-                            <TextBlock Text="{Binding Name}" FontSize="20"/>
-                            <TextBlock Text="{Binding Phone}" Foreground="Blue"/>
-                            <TextBlock Text="{Binding Address}" Foreground="Green"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
+            <Button Content="リスト保存" x:Name="SaveButton" Click="SaveButton_Click" Margin="2"/>
+            <Button Content="リスト削除" x:Name="DeleteButton" Click="DeleteButton_Click" Margin="2"/>
+            <Button Content="リスト更新" x:Name="ReadButton" Click="UpdateButton_Click" Margin="2"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="8*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="検索" Grid.Column="0" FontSize="21"/>
+                <TextBox x:Name="SearchTextBox" FontSize="20" TextChanged="SearchTextBox_TextChanged" Grid.Column="1"/>
+            </Grid>
+            <ListView x:Name="CustomerListView" Margin="0,8,0,0" Height="300" d:ItemsSource="{d:SampleData}" SelectionChanged="CustomerListView_SelectionChanged">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="名前" DisplayMemberBinding="{Binding Name}" Width="80"/>
+                        <GridViewColumn Header="電話番号" DisplayMemberBinding="{Binding Phone}" Width="100"/>
+                        <GridViewColumn Header="住所" DisplayMemberBinding="{Binding Address}" Width="100"/>
+                        <GridViewColumn Header="画像">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding ImagePath}" Height="50" Width="50" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
             </ListView>
         </StackPanel>
     </Grid>

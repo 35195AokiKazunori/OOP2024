@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CustomerApp.Objects {
     public class Customer {
-        [PrimaryKey,AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         /// <summary>
         /// 名前
@@ -22,9 +22,13 @@ namespace CustomerApp.Objects {
         /// </summary>
         /// <returns></returns>
         public string Address { get; set; }
+        /// <summary>
+        /// 画像のパス
+        /// </summary>
+        public byte[] ImagePath { get; set; }
 
         public override string ToString() {
-            return $"{Id} {Name} {Phone} {Address}";
+            return $"{Id} {Name} {Phone} {Address} {ImagePath}";
         }
     }
 }
